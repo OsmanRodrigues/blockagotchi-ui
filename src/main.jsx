@@ -6,12 +6,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { WalletProvider } from './services/wallet/wallet.provider';
 import { RollupsProvider } from './services/rollups/rollups.context';
 import { MessageProvider } from './atomic/message';
-import HomePage from './home';
+import HomeView from './views/home';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <HomePage />
+        element: <HomeView />
     },
     {
         path: 'ranking',
