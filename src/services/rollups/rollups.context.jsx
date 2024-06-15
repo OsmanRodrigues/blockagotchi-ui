@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 import { ethers } from 'ethers';
 import {
@@ -14,7 +14,13 @@ import {
 import { rollupsConfigs } from './config';
 import { DAPP_ADDRESS } from '../constants';
 
-export const useRollups = (dappAddress = DAPP_ADDRESS, handler) => {
+const RollupsContext = createContext();
+
+export const RollupsProvider = ({
+    children,
+    handler,
+    dappAddress = DAPP_ADDRESS
+}) => {
     const [contracts, setContracts] = useState();
     const [provider, setProvider] = useState();
     const connectedChain = useChainId();
@@ -95,5 +101,25 @@ export const useRollups = (dappAddress = DAPP_ADDRESS, handler) => {
         dappAddress
     ]);
 
-    return { contracts, dappAddress, provider };
+    const value = useMemo(
+        () => ({ contracts, dappAddress, provider }),
+        [contracts, provider, dappAddress]
+    );
+
+    return (
+        <RollupsContext.Provider value={value}>
+            {children}
+        </RollupsContext.Provider>
+    );
+};
+
+export const useRollups = () => {
+    const context = useContext(RollupsContext);
+
+    if (typeof context === 'undefined')
+        throw new Error(
+            'The useRollups hook must be consumed inside of a RollupsProvider child node.'
+        );
+
+    return context;
 };
