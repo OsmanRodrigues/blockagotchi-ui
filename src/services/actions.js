@@ -27,7 +27,7 @@ export const depositToken = async (
         };
     } catch (err) {
         console.error('deposit error ->', err);
-        return { ok: false, error: err };
+        throw { ok: false, error: err };
     }
 };
 

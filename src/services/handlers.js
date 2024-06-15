@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { DAPP_ADDRESS, TransactionStatus } from './constants';
+import { DAPP_ADDRESS, INSPECT_BASE_URL, TransactionStatus } from './constants';
 
 export const advanced = async (
     incomingPayload,
@@ -19,7 +19,47 @@ export const advanced = async (
             status: TransactionStatus[txReceipt.status]
         };
     } catch (err) {
-        console.error('err on advanced transaction ->', err);
-        return { ok: false, error: err };
+        console.error('error on advanced transaction ->', err);
+        throw { ok: false, error: err };
+    }
+};
+export const inspect = async (endpoint = '') => {
+    try {
+        const inspectRes = await fetch(`${INSPECT_BASE_URL}${endpoint}`);
+
+        if (!inspectRes.ok) throw inspectRes;
+
+        const jsonRes = await inspectRes.json();
+        const hexPayload = Array.isArray(jsonRes?.reports)
+            ? jsonRes.reports.find(data => !!data)?.payload
+            : undefined;
+
+        if (!hexPayload)
+            return {
+                ok: true,
+                status: 204
+            };
+
+        const utf8Payload = ethers.utils.toUtf8String(hexPayload);
+        const payloadFallback = utf8Payload.startsWith('{')
+            ? JSON.parse(utf8Payload)
+            : utf8Payload;
+
+        return {
+            ok: inspectRes.ok,
+            status: inspectRes.status,
+            data: payloadFallback
+        };
+    } catch (err) {
+        console.error('error on advanced inspect ->', err);
+        throw {
+            ok: err.ok ?? false,
+            ...(typeof err.ok === 'boolean'
+                ? {
+                      status: err.status,
+                      error: await err.json()
+                  }
+                : { error: err })
+        };
     }
 };
