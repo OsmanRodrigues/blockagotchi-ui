@@ -24,6 +24,7 @@ module.exports = {
         ],
         'react/react-in-jsx-scope': 0,
         'no-unused-vars': 1,
-        'react/prop-types': 0
+        'react/prop-types': 0,
+        'react-refresh/only-export-components': 0
     }
 };
