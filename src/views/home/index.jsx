@@ -1,13 +1,13 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { Header } from './atomic/header.mol';
-import { useRollups } from './services/rollups/rollups.context';
-import * as actions from './services/actions';
-import * as inspects from './services/inspects';
+import { Header } from '../../atomic/header.mol';
+import { useRollups } from '../../services/rollups/rollups.context';
+import * as actions from '../../services/actions';
+import * as inspects from '../../services/inspects';
 
-import { useMessage } from './atomic/message';
+import { useMessage } from '../../atomic/message';
 import { useEffect } from 'react';
 
-function HomePage() {
+function HomeView() {
     const rollups = useRollups();
     const message = useMessage();
 
@@ -52,4 +52,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default HomeView;
