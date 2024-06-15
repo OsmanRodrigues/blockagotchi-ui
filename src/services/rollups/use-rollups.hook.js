@@ -11,7 +11,7 @@ import {
     ERC1155SinglePortal__factory,
     ERC1155BatchPortal__factory
 } from './generated';
-import configFile from './config.json';
+import { rollupsConfigs } from './config';
 import { DAPP_ADDRESS } from '../constants';
 
 export const useRollups = (dappAddress = DAPP_ADDRESS, handler) => {
@@ -22,11 +22,16 @@ export const useRollups = (dappAddress = DAPP_ADDRESS, handler) => {
 
     useEffect(() => {
         if (connectedAccount.connector?.getProvider && connectedChain) {
-            const config = configFile['0x7a69'];
-
             connectedAccount.connector
                 .getProvider(connectedChain)
                 .then(walletProvider => {
+                    const config = rollupsConfigs[connectedChain];
+
+                    if (!config)
+                        throw new Error(
+                            `Chain ${connectedChain} not configured.`
+                        );
+
                     const currentProvider = new ethers.providers.Web3Provider(
                         walletProvider
                     );
