@@ -102,8 +102,13 @@ export const RollupsProvider = ({
     ]);
 
     const value = useMemo(
-        () => ({ contracts, dappAddress, provider }),
-        [contracts, provider, dappAddress]
+        () => ({
+            contracts,
+            dappAddress,
+            provider,
+            signerAddress: connectedAccount.address
+        }),
+        [contracts, provider, dappAddress, connectedAccount.address]
     );
 
     return (
