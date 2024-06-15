@@ -1,0 +1,8 @@
+schema: ./src/services/graphql/schema.graphql
+documents: ./src/services/graphql/query.graphql
+generates:
+    ./src/services/graphql/generated/index.ts:
+        plugins:
+            - typescript
+            - typescript-operations
+            - typescript-urql
