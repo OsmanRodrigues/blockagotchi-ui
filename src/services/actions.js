@@ -1,12 +1,8 @@
 import { ethers } from 'ethers';
 import { advanced } from './handlers';
-import { DAPP_ADDRESS } from './constants';
+import { DAPP_ADDRESS, TransactionStatus } from './constants';
 
 const action = { create_blockagotchi: 'create_blockagotchi' };
-const txStatus = {
-    0: 'reverted',
-    1: 'success'
-};
 
 export const depositToken = async (
     amount = 1,
@@ -27,7 +23,7 @@ export const depositToken = async (
 
         return {
             ok: txReceipt.status === 1,
-            status: txStatus[txReceipt.status]
+            status: TransactionStatus[txReceipt.status]
         };
     } catch (err) {
         console.error('deposit error ->', err);
