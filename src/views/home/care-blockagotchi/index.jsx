@@ -1,5 +1,6 @@
 import { SectionWrapper } from '../../../atomic/wrapper/section.wrapper';
 import { BlockagotchiDisplay } from './blockagotchi-display';
+import { StatusBar } from './status-bar';
 
 // "isLoading": false,
 // "id": 1,
@@ -21,9 +22,9 @@ import { BlockagotchiDisplay } from './blockagotchi-display';
 // "overall_score": 50
 
 export const CareBlockagotchiSection = props => {
-    // console.log('props ->', props);
     return (
         <SectionWrapper>
+            <StatusBar {...props} />
             <BlockagotchiDisplay />
         </SectionWrapper>
     );
