@@ -10,6 +10,7 @@ import Wolf from '../../../../assets/Images/Wolf.png';
 
 import { useAnimate } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import { useBlockagotchiReaction } from '../../../services/context/blockagotchi-reaction.context';
 
 const pet = {
     1: Bird,
@@ -22,6 +23,41 @@ const pet = {
     8: Toucan,
     9: Wolf
 };
+const timeDefault = {
+    frame1: {
+        times: [0, 0.5],
+        duration: 0.5,
+        repeatDelay: 0.8
+    },
+    frame2: {
+        times: [0, 0.6],
+        duration: 0.6,
+        repeatDelay: 0.7
+    },
+    frame3: {
+        times: [0, 0.7],
+        duration: 0.7,
+        repeatDelay: 0.6
+    }
+};
+
+const timeFast = {
+    frame1: {
+        times: [0, 0.1],
+        duration: 0.1,
+        repeatDelay: 0.4
+    },
+    frame2: {
+        times: [0, 0.2],
+        duration: 0.2,
+        repeatDelay: 0.3
+    },
+    frame3: {
+        times: [0, 0.3],
+        duration: 0.3,
+        repeatDelay: 0.2
+    }
+};
 
 const selectPetRandom = () => {
     const random = Math.random() * 10;
@@ -33,6 +69,7 @@ const selectPetRandom = () => {
 export const BlockagotchiDisplay = () => {
     const currentPet = useRef(selectPetRandom());
     const [scope, animate] = useAnimate();
+    const [reaction] = useBlockagotchiReaction();
     const stylesDefault = {
         position: 'absolute',
         width: '180px',
@@ -40,42 +77,37 @@ export const BlockagotchiDisplay = () => {
         top: 0,
         objectFit: 'cover'
     };
+    const timeFallback = reaction === 'excited' ? timeFast : timeDefault;
 
     useEffect(() => {
         animate(
             '#frame1',
             { opacity: [0, 1] },
             {
-                times: [0, 0.5],
-                duration: 0.5,
+                ...timeFallback.frame1,
                 ease: 'anticipate',
-                repeat: Infinity,
-                repeatDelay: 0.8
+                repeat: Infinity
             }
         );
         animate(
             '#frame2',
             { opacity: [1, 0] },
             {
-                times: [0, 0.6],
-                duration: 0.6,
+                ...timeFallback.frame2,
                 ease: 'anticipate',
-                repeat: Infinity,
-                repeatDelay: 0.7
+                repeat: Infinity
             }
         );
         animate(
             '#frame3',
             { opacity: [1, 0] },
             {
-                times: [0, 0.7],
-                duration: 0.7,
+                ...timeFallback.frame3,
                 ease: 'anticipate',
-                repeat: Infinity,
-                repeatDelay: 0.6
+                repeat: Infinity
             }
         );
-    }, []);
+    }, [timeFallback]);
 
     return (
         <>
