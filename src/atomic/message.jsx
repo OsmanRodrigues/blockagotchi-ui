@@ -20,7 +20,10 @@ export const MessageProvider = ({ children }) => {
         const timerId = window.setInterval(() => {
             setMessages(prev => {
                 const newMessages = new Map(prev);
-                const timerId = newMessages.get(id).timerId;
+                const timerId = newMessages.get(id)?.timerId;
+
+                if (!timerId) return prev;
+
                 timers.current = timers.current.length
                     ? [...timers.current, timerId]
                     : [timerId];

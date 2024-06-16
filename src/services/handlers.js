@@ -66,9 +66,12 @@ export const inspect = async (endpoint = '') => {
             data: payloadFallback
         };
     } catch (err) {
-        console.error('error on inspect ->', err);
+        console.error('error on inspect ->', err.message ?? err);
+        const isServerSide =
+            err.message && err.message.toLowerCase().includes('failed');
         throw {
             ok: err.ok ?? false,
+            status: isServerSide ? 500 : 400,
             ...(typeof err.ok === 'boolean'
                 ? {
                       status: err.status,
