@@ -35,8 +35,8 @@ export const BlockagotchiDisplay = () => {
     const [scope, animate] = useAnimate();
     const stylesDefault = {
         position: 'absolute',
-        width: '150px',
-        height: '150px',
+        width: '180px',
+        height: '180px',
         top: 0,
         objectFit: 'cover'
     };
@@ -98,7 +98,7 @@ export const BlockagotchiDisplay = () => {
                             src={currentPet.current}
                             style={{
                                 ...stylesDefault,
-                                objectPosition: '6% 25%'
+                                objectPosition: '4% 50%'
                             }}
                         />
                     </div>
@@ -107,7 +107,7 @@ export const BlockagotchiDisplay = () => {
                             src={currentPet.current}
                             style={{
                                 ...stylesDefault,
-                                objectPosition: '37% 25%'
+                                objectPosition: '35% 50%'
                             }}
                         />
                     </div>
@@ -116,7 +116,7 @@ export const BlockagotchiDisplay = () => {
                             src={currentPet.current}
                             style={{
                                 ...stylesDefault,
-                                objectPosition: '68% 25%'
+                                objectPosition: '66% 50%'
                             }}
                         />
                     </div>
