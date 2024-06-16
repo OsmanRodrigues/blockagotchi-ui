@@ -5,6 +5,7 @@ import { getBlockagotchi } from '../../services/inspects';
 import { useMessage } from '../../atomic/message';
 import { ViewWrapper } from '../../atomic/wrapper/view.wrapper.atm';
 import { CreateBlockagotchiSection } from './create-blockagotchi';
+import { CareBlockagotchiSection } from './care-blockagotchi';
 
 function HomeView() {
     const message = useMessage();
@@ -71,7 +72,10 @@ function HomeView() {
             ) : blockagotchi.status === 'error' ? (
                 <p>Oops! Some error occurred while load your blockagotchi.</p>
             ) : (
-                <p>My blockagotchi: {blockagotchi.data?.name}</p>
+                <CareBlockagotchiSection
+                    isLoading={blockagotchi.status === 'pending'}
+                    {...blockagotchi.data}
+                />
             )}
         </ViewWrapper>
     );
