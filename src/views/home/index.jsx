@@ -1,5 +1,3 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { Header } from '../../atomic/header.mol';
 import { useRollups } from '../../services/rollups/rollups.context';
 import * as actions from '../../services/actions';
 import * as inspects from '../../services/inspects';
@@ -32,19 +30,13 @@ function HomeView() {
 
     return (
         <>
-            <div className="nes-badge">
-                <span className="is-primary">Test</span>
-            </div>
-            <Header />
             <div
                 style={{
                     display: 'flex',
                     justifyContent: 'flex-end',
                     padding: 12
                 }}
-            >
-                <ConnectButton />
-            </div>
+            ></div>
             <button className="nes-btn is-primary" onClick={test}>
                 create
             </button>

@@ -5,8 +5,10 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { WalletProvider } from './services/wallet/wallet.provider';
 import { RollupsProvider } from './services/rollups/rollups.context';
+import { AccountBalanceProvider } from './services/context/account-balance.context';
 import { MessageProvider } from './atomic/message';
 import HomeView from './views/home';
+import { Header } from './atomic/header.mol';
 
 const router = createBrowserRouter([
     {
@@ -24,7 +26,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <MessageProvider>
             <WalletProvider>
                 <RollupsProvider>
-                    <RouterProvider router={router} />
+                    <AccountBalanceProvider>
+                        <Header />
+                        <RouterProvider router={router} />
+                    </AccountBalanceProvider>
                 </RollupsProvider>
             </WalletProvider>
         </MessageProvider>
