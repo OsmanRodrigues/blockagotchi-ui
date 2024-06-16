@@ -1,6 +1,8 @@
+import { ViewWrapper } from '../../atomic/wrapper/view.wrapper.atm';
+
 function HomeView() {
     return (
-        <>
+        <ViewWrapper>
             <div
                 style={{
                     display: 'flex',
@@ -9,7 +11,7 @@ function HomeView() {
                 }}
             ></div>
             <button className="nes-btn is-primary">create</button>
-        </>
+        </ViewWrapper>
     );
 }
 
