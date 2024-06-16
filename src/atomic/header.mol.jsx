@@ -17,8 +17,9 @@ export const Header = () => {
 
     return (
         <header
-            className="nes-container"
+            className="nes-container is-rounded"
             style={{
+                minHeight: '10vh',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-evenly',
