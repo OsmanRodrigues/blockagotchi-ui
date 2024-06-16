@@ -2,7 +2,16 @@ import { ethers } from 'ethers';
 import { advanced } from './handlers';
 import { DAPP_ADDRESS, TransactionStatus } from './constants';
 
-const action = { create_blockagotchi: 'create_blockagotchi' };
+const action = {
+    create_blockagotchi: 'create_blockagotchi',
+    feed_blockagotchi: 'feed_blockagotchi'
+};
+export const Food = {
+    Fish: 'Fish',
+    Meat: 'Meat',
+    Vegetables: 'Vegetables',
+    Fruit: 'Fruit'
+};
 
 export const depositToken = async (
     amount = 1,
@@ -33,3 +42,8 @@ export const depositToken = async (
 
 export const createBlockagotchi = (name, inputContract) =>
     advanced({ action: action.create_blockagotchi, name }, inputContract);
+export const feedBlockagotchi = (food, inputContract) =>
+    advanced(
+        { action: action.feed_blockagotchi, food_type: food },
+        inputContract
+    );
