@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Dialog } from '../../../atomic/dialog.mol';
-import { Food, feedBlockagotchi } from '../../../services/actions';
+import {
+    Food,
+    feedBlockagotchi,
+    takeAWalkWithBlockagotchi
+} from '../../../services/actions';
 import { useRollups } from '../../../services/rollups/rollups.context';
 import { useAccountBalance } from '../../../services/context/account-balance.context';
 import { useMessage } from '../../../atomic/message';
@@ -18,31 +22,49 @@ export const ActionBar = () => {
         onOpen: () => setFeedDialog(prev => ({ ...prev, isOpen: true }))
     });
     const [selectedFood, setSelectedFood] = useState();
-    const [feedStatus, setFeedStatus] = useState('idle');
+    const [actionStatus, setActionStatus] = useState('idle');
+    const shouldDisableAllActions = actionStatus.includes('pending');
+
+    const onActionSucceed = signerAddress => {
+        getAccountBalance(signerAddress);
+        loadBlockagotchi(signerAddress);
+        setActionStatus('success');
+    };
+    const onActionFails = msg => {
+        message.error(msg);
+        setActionStatus('error');
+    };
 
     const onConfirmFeed = (food, inputContract, signerAddress) => {
         feedDialog.onClose();
-        setFeedStatus('pending');
+        setActionStatus('pendingFeed');
         feedBlockagotchi(food, inputContract)
-            .then(() => {
-                getAccountBalance(signerAddress);
-                loadBlockagotchi(signerAddress);
-                setFeedStatus('success');
-            })
-            .catch(() => {
-                message.error(
+            .then(() => onActionSucceed(signerAddress))
+            .catch(() =>
+                onActionFails(
                     'Oops! An error occurred on trying feed your blockagotchi.'
-                );
-                setFeedStatus('error');
-            });
+                )
+            );
+    };
+
+    const onConfirmTakeAWalk = (inputContract, signerAddress) => {
+        feedDialog.onClose();
+        setActionStatus('pendingTakeAWalk');
+        takeAWalkWithBlockagotchi(inputContract)
+            .then(() => onActionSucceed(signerAddress))
+            .catch(() =>
+                onActionFails(
+                    'Oops! An error occurred on trying to walk your blockagotchi.'
+                )
+            );
     };
 
     return (
-        <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Dialog
                 title="Feed your blockagotchi!"
-                cta={feedStatus === 'pending' ? 'Feeding...' : 'Feed'}
-                isPending={feedStatus === 'pending'}
+                cta={actionStatus === 'pendingFeed' ? 'Feeding...' : 'Feed'}
+                isPending={shouldDisableAllActions}
                 onConfirm={() =>
                     onConfirmFeed(
                         selectedFood,
@@ -71,6 +93,20 @@ export const ActionBar = () => {
                     </select>
                 </div>
             </Dialog>
+            <button
+                disabled={shouldDisableAllActions}
+                className={`nes-btn ${shouldDisableAllActions ? 'is-disabled' : 'is-primary'}`}
+                onClick={() =>
+                    onConfirmTakeAWalk(
+                        rollups.contracts.inputContract,
+                        rollups.signerAddress
+                    )
+                }
+            >
+                {actionStatus === 'pendingTakeAWalk'
+                    ? 'Walking...'
+                    : 'Take a walk'}
+            </button>
         </div>
     );
 };
