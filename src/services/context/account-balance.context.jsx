@@ -33,6 +33,10 @@ export const AccountBalanceProvider = ({ children }) => {
                         error: err
                     }));
                 });
+        } else {
+            setAccountBalance(prev =>
+                prev.status !== 'idle' ? { status: 'idle' } : prev
+            );
         }
     }, [rollups.signerAddress]);
 
