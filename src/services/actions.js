@@ -4,7 +4,8 @@ import { DAPP_ADDRESS, TransactionStatus } from './constants';
 
 const action = {
     create_blockagotchi: 'create_blockagotchi',
-    feed_blockagotchi: 'feed_blockagotchi'
+    feed_blockagotchi: 'feed_blockagotchi',
+    walk_blockagotchi: 'walk_blockagotchi'
 };
 export const Food = {
     Fish: 'Fish',
@@ -45,5 +46,10 @@ export const createBlockagotchi = (name, inputContract) =>
 export const feedBlockagotchi = (food, inputContract) =>
     advanced(
         { action: action.feed_blockagotchi, food_type: food },
+        inputContract
+    );
+export const takeAWalkWithBlockagotchi = inputContract =>
+    advanced(
+        { action: action.walk_blockagotchi, walk_type: 'running' },
         inputContract
     );
