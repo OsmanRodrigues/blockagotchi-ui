@@ -12,36 +12,38 @@ export const AccountBalanceProvider = ({ children }) => {
         status: 'idle'
     });
 
+    const get = signerAddress => {
+        setAccountBalance(prev => ({ ...prev, status: 'pending' }));
+        getBalance(signerAddress)
+            .then(res => {
+                if (res.ok && res.data)
+                    setAccountBalance({
+                        status: 'success',
+                        data: res.data
+                    });
+            })
+            .catch(err => {
+                message.error('Oops! An error ocurred on check your balance.');
+                setAccountBalance(prev => ({
+                    ...prev,
+                    status: 'error',
+                    error: err
+                }));
+            });
+    };
+
     useEffect(() => {
-        if (rollups.signerAddress) {
-            setAccountBalance(prev => ({ ...prev, status: 'pending' }));
-            getBalance(rollups.signerAddress)
-                .then(res => {
-                    if (res.ok && res.data)
-                        setAccountBalance({
-                            status: 'success',
-                            data: res.data
-                        });
-                })
-                .catch(err => {
-                    message.error(
-                        'Oops! An error ocurred on check your balance.'
-                    );
-                    setAccountBalance(prev => ({
-                        ...prev,
-                        status: 'error',
-                        error: err
-                    }));
-                });
-        } else {
+        if (rollups.signerAddress) get(rollups.signerAddress);
+        else
             setAccountBalance(prev =>
                 prev.status !== 'idle' ? { status: 'idle' } : prev
             );
-        }
     }, [rollups.signerAddress]);
 
+    const value = [accountBalance, get];
+
     return (
-        <AccountBalanceContext.Provider value={accountBalance}>
+        <AccountBalanceContext.Provider value={value}>
             {children}
         </AccountBalanceContext.Provider>
     );

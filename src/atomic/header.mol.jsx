@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 export const Header = () => {
     const location = useLocation();
-    const accountBalance = useAccountBalance();
+    const [accountBalance] = useAccountBalance();
     const isHome = location.pathname === '/';
 
     const balanceFeedbackFallback =
@@ -13,7 +13,12 @@ export const Header = () => {
             ? 'Loading your balance...'
             : accountBalance.status === 'success'
               ? `Game balance: ${textShortener(accountBalance.data.amount, 6, 2)} ${accountBalance.data.token_type.slice(0, 3).toUpperCase()}`
-              : 'Hi! Please connect your wallet to start.';
+              : accountBalance.status === 'error' &&
+                  accountBalance.error.status === 500
+                ? 'Sorry! Server is unavilable now.'
+                : accountBalance.status === 'error'
+                  ? 'Sorry! Something went wrong.'
+                  : 'Hi! Please connect your wallet to start.';
 
     return (
         <header
