@@ -1,10 +1,13 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccountBalance } from '../services/context/account-balance.context';
 import { textShortener } from '../utils';
+import { Link, useLocation } from 'react-router-dom';
 
 export const Header = () => {
+    const location = useLocation();
     const accountBalance = useAccountBalance();
-    console.log('accountBalance ->', accountBalance);
+    const isHome = location.pathname === '/';
+
     const balanceFeedbackFallback =
         accountBalance.status === 'pending'
             ? 'Loading your balance...'
@@ -18,11 +21,25 @@ export const Header = () => {
             style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-evenly',
+                gap: 8
             }}
         >
+            {isHome ? (
+                <Link to="/ranking">
+                    <span className="nes-btn">Ranking</span>
+                </Link>
+            ) : (
+                <Link to="/">
+                    <span className="nes-btn">Home</span>
+                </Link>
+            )}
             <span className="title">{balanceFeedbackFallback}</span>
-            <ConnectButton />
+            <ConnectButton
+                chainStatus="none"
+                showBalance={false}
+                label="Connect"
+            />
         </header>
     );
 };
