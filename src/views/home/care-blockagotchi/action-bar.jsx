@@ -11,12 +11,14 @@ import {
 import { useRollups } from '../../../services/rollups/rollups.context';
 import { useBlockagotchiInfo } from '../../../services/context/blockagotchi-info.context';
 import { useAccountBalance } from '../../../services/context/account-balance.context';
+import { useBlockagotchiReaction } from '../../../services/context/blockagotchi-reaction.context';
 
 export const ActionBar = () => {
     const message = useMessage();
     const rollups = useRollups();
     const [, getAccountBalance] = useAccountBalance();
     const [, loadBlockagotchi] = useBlockagotchiInfo();
+    const [, setReaction] = useBlockagotchiReaction();
 
     const [feedDialog, setFeedDialog] = useState({
         isOpen: false,
@@ -44,8 +46,10 @@ export const ActionBar = () => {
             .then(() => {
                 onActionSucceed(signerAddress);
                 message.success(
-                    'Your blockagotchi loved this food! Nhom, nhom!'
+                    'Your blockagotchi loved this food! Nhom, nhom!',
+                    () => setReaction()
                 );
+                setReaction('excited');
             })
             .catch(() =>
                 onActionFails(
@@ -59,7 +63,11 @@ export const ActionBar = () => {
         takeAWalkWithBlockagotchi(inputContract)
             .then(() => {
                 onActionSucceed(signerAddress);
-                message.success('Your blockagotchi got a hard workout! Yeah!');
+                message.success(
+                    'Your blockagotchi got a hard workout! Yeah!',
+                    () => setReaction()
+                );
+                setReaction('excited');
             })
             .catch(() =>
                 onActionFails(
@@ -72,10 +80,12 @@ export const ActionBar = () => {
         setActionStatus('pendingBathe');
         batheBlockagotchi(inputContract)
             .then(() => {
-                message.success(
-                    'Your blockagotchi got a refreshed bath! Whoopi!'
-                );
                 onActionSucceed(signerAddress);
+                message.success(
+                    'Your blockagotchi got a refreshed bath! Whoopi!',
+                    () => setReaction()
+                );
+                setReaction('excited');
             })
             .catch(() =>
                 onActionFails(

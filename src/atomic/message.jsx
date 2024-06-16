@@ -15,10 +15,11 @@ export const MessageProvider = ({ children }) => {
     const timers = useRef([]);
     const msgs = Array.from(messages, ([, value]) => value);
 
-    const show = useCallback((text = '', className = 'primary') => {
+    const show = useCallback((text = '', className = 'primary', onClear) => {
         const id = Date.now();
         const timerId = window.setInterval(() => {
             setMessages(prev => {
+                onClear?.();
                 const newMessages = new Map(prev);
                 const timerId = newMessages.get(id)?.timerId;
 
@@ -46,10 +47,10 @@ export const MessageProvider = ({ children }) => {
     }, []);
     const value = useMemo(
         () => ({
-            success: text => show(text, 'success'),
-            warning: text => show(text, 'warning'),
-            error: text => show(text, 'error'),
-            show: text => show(text)
+            success: (text, onClear) => show(text, 'success', onClear),
+            warning: (text, onClear) => show(text, 'warning', onClear),
+            error: (text, onClear) => show(text, 'error', onClear),
+            show: (text, onClear) => show(text, 'primary', onClear)
         }),
         []
     );
