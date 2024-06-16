@@ -30,7 +30,7 @@ export const MessageProvider = ({ children }) => {
                 newMessages.delete(id);
                 return newMessages;
             });
-        }, 3000);
+        }, 4000);
         const message = {
             id,
             text,
