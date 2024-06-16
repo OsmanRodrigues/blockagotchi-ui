@@ -41,9 +41,10 @@ export const inspect = async (endpoint = '') => {
             };
 
         const utf8Payload = ethers.utils.toUtf8String(hexPayload);
-        const payloadFallback = utf8Payload.startsWith('{')
-            ? JSON.parse(utf8Payload)
-            : utf8Payload;
+        const payloadFallback =
+            utf8Payload.startsWith('{') || utf8Payload.startsWith('[')
+                ? JSON.parse(utf8Payload)
+                : utf8Payload;
 
         if (payloadFallback.error) {
             throw {
