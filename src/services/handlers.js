@@ -45,19 +45,34 @@ export const inspect = async (endpoint = '') => {
             ? JSON.parse(utf8Payload)
             : utf8Payload;
 
+        if (payloadFallback.error) {
+            throw {
+                ok: false,
+                message: payloadFallback.error,
+                status:
+                    typeof payloadFallback.error !== 'string'
+                        ? 400
+                        : payloadFallback.error
+                                .toLowerCase()
+                                .includes('not found')
+                          ? 404
+                          : 400
+            };
+        }
+
         return {
             ok: inspectRes.ok,
             status: inspectRes.status,
             data: payloadFallback
         };
     } catch (err) {
-        console.error('error on advanced inspect ->', err);
+        console.error('error on inspect ->', err);
         throw {
             ok: err.ok ?? false,
             ...(typeof err.ok === 'boolean'
                 ? {
                       status: err.status,
-                      error: await err.json()
+                      error: err.json ? await err.json() : err
                   }
                 : { error: err })
         };
