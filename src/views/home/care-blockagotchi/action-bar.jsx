@@ -41,7 +41,12 @@ export const ActionBar = () => {
         feedDialog.onClose();
         setActionStatus('pendingFeed');
         feedBlockagotchi(food, inputContract)
-            .then(() => onActionSucceed(signerAddress))
+            .then(() => {
+                onActionSucceed(signerAddress);
+                message.success(
+                    'Your blockagotchi loved this food! Nhom, nhom!'
+                );
+            })
             .catch(() =>
                 onActionFails(
                     'Oops! An error occurred on trying feed your blockagotchi.'
@@ -52,7 +57,10 @@ export const ActionBar = () => {
     const handleTakeAWalk = (inputContract, signerAddress) => {
         setActionStatus('pendingTakeAWalk');
         takeAWalkWithBlockagotchi(inputContract)
-            .then(() => onActionSucceed(signerAddress))
+            .then(() => {
+                onActionSucceed(signerAddress);
+                message.success('Your blockagotchi got a hard workout! Yeah!');
+            })
             .catch(() =>
                 onActionFails(
                     'Oops! An error occurred on trying to walk your blockagotchi.'
@@ -63,7 +71,12 @@ export const ActionBar = () => {
     const handleBathe = (inputContract, signerAddress) => {
         setActionStatus('pendingBathe');
         batheBlockagotchi(inputContract)
-            .then(() => onActionSucceed(signerAddress))
+            .then(() => {
+                message.success(
+                    'Your blockagotchi got a refreshed bath! Whoopi!'
+                );
+                onActionSucceed(signerAddress);
+            })
             .catch(() =>
                 onActionFails(
                     'Oops! An error occurred on trying to bathe your blockagotchi.'
