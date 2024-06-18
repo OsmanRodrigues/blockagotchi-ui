@@ -13,7 +13,7 @@ function RankingView() {
     });
 
     useEffect(() => {
-        setRanking({ status: 'pending' });
+        setRanking(prev => ({ ...prev, status: 'pending' }));
         getRanking()
             .then(res =>
                 setRanking({

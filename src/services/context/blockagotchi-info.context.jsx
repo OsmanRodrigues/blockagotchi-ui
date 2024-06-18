@@ -12,7 +12,7 @@ export const BlockagotchiInfoProvider = ({ children }) => {
         status: 'idle'
     });
     const get = signerAddress => {
-        setBlockagotchi({ status: 'pending' });
+        setBlockagotchi(prev => ({ ...prev, status: 'pending' }));
         getBlockagotchi(signerAddress)
             .then(res =>
                 setBlockagotchi({
